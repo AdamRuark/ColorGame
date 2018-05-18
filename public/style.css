@@ -1,0 +1,11 @@
+#canvas {
+	border-style: solid;
+	border-width: 2px
+	border: red;
+}
+
+#main-game {
+	padding-top: 50px;
+	display: flex;
+	justify-content: center;
+}
