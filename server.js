@@ -3,7 +3,7 @@ var fs = require('fs');
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 3000;
-var uglify = require('./modules/compress.js');
+var package = require('./compress.js');
 
 app.use(express.static('public'));
 
@@ -13,7 +13,13 @@ app.use(express.static('public'));
 });*/
 
 
-app.listen(port, function(){
-	console.log("Started on port: " + port + "\n");
-	uglify.compress();
+package.compress(function() { 
+	app.listen(port, function() {
+		console.log("Started on port: " + port + "\n");
+	})
 });
+
+/*app.listen(port, function(){
+	console.log("Started on port: " + port + "\n");
+	package.compress();
+});*/

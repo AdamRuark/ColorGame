@@ -1,30 +1,23 @@
-// var uglify = require('uglify-es');
 var browserify = require('browserify')();
 var fs = require('fs');
 var path = require('path');
 
 module.exports = {
-	compress: function() {
-		// var code = {};
+	compress: function(callback) {
+		var bundlefs = fs.createWriteStream(path.join(__dirname, '/public/index.min.js'))
+		files = fs.readdirSync(path.join(__dirname, '/modules/'));
 
-		files = fs.readdirSync(__dirname);
 		for (var i = 0; i < files.length; i++) {
 			files[i] = './modules/' + files[i];
-		} 
+		}
+		files[files.length] = './public/index.js';
+
 		browserify.add(files);
-		browserify.exclude('modules/compress.js');
-		browserify.bundle().pipe('test.js');
+		browserify.bundle().pipe(bundlefs);
 
-		// for(var i = 0; i < files.length; i++) {
-		// 	if(files[i] != 'compress.js') {
-		// 		// code[files[i]] = fs.readFileSync(path.join(__dirname, files[i]), 'utf8');
-		// 		browserify.add(file[i]);
-		// 	}
-		// }
-		// code['index.js'] = fs.readFileSync('public/index.js', 'utf8');
-
-		// fs.writeFileSync('public/test.js', uglify.minify(code).code);
-		// var result = uglify.minify(code);
-		// console.log(result.code);
+		bundlefs.on('finish', function() {
+			console.log('Compression complete');
+			return callback();
+		});	
 	}
 }
