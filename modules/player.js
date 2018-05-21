@@ -14,17 +14,11 @@ module.exports = {
 		this.direction = key;
 	},
 
-	move: function() {
-		var step = 7;
+	playerMove: function() {
+		var step = 10;
 		switch(this.direction) {
-			case 'w':
-				this.y -= step;
-				break;
 			case 'a':
 				this.x -= step;
-				break;
-			case 's':
-				this.y += step;
 				break;
 			case 'd':
 				this.x += step;
@@ -33,6 +27,7 @@ module.exports = {
 				// Do nothing
 				break;
 		}
+
 	},
 
 	stop: function() {

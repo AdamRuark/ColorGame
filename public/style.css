@@ -1,7 +1,5 @@
 #canvas {
-	border-style: solid;
-	border-width: 2px
-	border: red;
+	border: red 2px solid;
 }
 
 #main-game {

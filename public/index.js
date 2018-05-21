@@ -10,7 +10,7 @@ module.exports = {
 		this.canvas.width = 1000;
 		this.canvas.height = 1000;
 		this.context.globalAlpha = 1;
-		this.fillStyle = 'black';
+		this.fillStyle = 'blue';
 
 		// Bind keys
 		this.canvas.addEventListener('keypress', function(event) {
@@ -62,19 +62,16 @@ module.exports = {
 
 	collisionCheck(){
 		// Return true if a collision occurs, false otherwise
-		// console.log(Player.direction);
-		if(Player.direction == 'w' && Player.y <= 0) {
-			return true;
-		}
-		else if(Player.direction == 'a' && Player.x <= 0) {
-			return true;
-		}
-		else if(Player.direction == 's' && Player.y + Player.height >= this.canvas.height) {
+		// console.log(Player.x + ", " + Player.y);
+		if(Player.direction == 'a' && Player.x <= 0) {
 			return true;
 		}
 		else if(Player.direction == 'd' && Player.x + Player.width >= this.canvas.width) {
 			return true;
 		}
+
+
+
 		return false;
 	}
 
@@ -104,16 +101,10 @@ module.exports = {
 	},
 
 	move: function() {
-		var step = 7;
+		var step = 10;
 		switch(this.direction) {
-			case 'w':
-				this.y -= step;
-				break;
 			case 'a':
 				this.x -= step;
-				break;
-			case 's':
-				this.y += step;
 				break;
 			case 'd':
 				this.x += step;
@@ -122,6 +113,7 @@ module.exports = {
 				// Do nothing
 				break;
 		}
+
 	},
 
 	stop: function() {
