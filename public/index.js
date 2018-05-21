@@ -2,7 +2,6 @@
 var Player = require('./player.js');
 
 module.exports = {
-
 	canvas: document.getElementById('canvas'),
 	context: document.getElementById('canvas').getContext('2d'),
 
@@ -14,18 +13,18 @@ module.exports = {
 		this.fillStyle = 'black';
 
 		// Bind keys
-		// console.log('binding keys');
 		this.canvas.addEventListener('keypress', function(event) {
 			switch(event.key){
 				case 'w' :
 				case 'a' :
 				case 's' :
 				case 'd' :
-				case ' ' :
 					Player.changeDirection(event.key);
+					break;
+				case ' ':
+					console.log("Jump");
 			}
 		});
-
 		this.canvas.addEventListener('keyup', function(event) {
 			if(event.key == Player.direction){
 				Player.stop();
@@ -33,14 +32,14 @@ module.exports = {
 		});
 
 		// Set up player
-		Player.init(10, 10, 20, 20);
+		Player.init(100, 100, 20, 20);
 
 		// focus game area
 		this.canvas.focus();
 	},
+
 	start: function() {
-		// Fuck js. 'this' loses scope in refresh(), so I have to reference an anonymous function to keep scope
-		this.interval = setInterval(() => this.refresh(), 10);
+		this.interval = setInterval(() => this.refresh(), 16.67);
 	},
 
 	stop: function() {
@@ -52,10 +51,31 @@ module.exports = {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// Update positions
-		Player.move();
+		if(!this.collisionCheck()){
+			Player.move();
+		}
+
 
 		// Draw the new changes
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
+	},
+
+	collisionCheck(){
+		// Return true if a collision occurs, false otherwise
+		// console.log(Player.direction);
+		if(Player.direction == 'w' && Player.y <= 0) {
+			return true;
+		}
+		else if(Player.direction == 'a' && Player.x <= 0) {
+			return true;
+		}
+		else if(Player.direction == 's' && Player.y + Player.height >= this.canvas.height) {
+			return true;
+		}
+		else if(Player.direction == 'd' && Player.x + Player.width >= this.canvas.width) {
+			return true;
+		}
+		return false;
 	}
 
 
@@ -79,11 +99,12 @@ module.exports = {
 	},
 
 	changeDirection: function(key) {
+		this.prev_dir = this.direction;
 		this.direction = key;
 	},
 
 	move: function() {
-		var step = 5;
+		var step = 7;
 		switch(this.direction) {
 			case 'w':
 				this.y -= step;

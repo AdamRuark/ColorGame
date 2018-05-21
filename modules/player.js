@@ -10,11 +10,12 @@ module.exports = {
 	},
 
 	changeDirection: function(key) {
+		this.prev_dir = this.direction;
 		this.direction = key;
 	},
 
 	move: function() {
-		var step = 5;
+		var step = 7;
 		switch(this.direction) {
 			case 'w':
 				this.y -= step;
