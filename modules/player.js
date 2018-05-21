@@ -1,26 +1,40 @@
 module.exports = {
 
-	init: function(x, y) {
+	direction: null,
+
+	init: function(x, y, width, height) {
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
 	},
 
-	move: function(key) {
-		console.log(key);
-		switch(key) {
+	changeDirection: function(key) {
+		this.direction = key;
+	},
+
+	move: function() {
+		var step = 5;
+		switch(this.direction) {
 			case 'w':
-				this.y -= 10;
+				this.y -= step;
 				break;
 			case 'a':
-				this.x -= 10;
+				this.x -= step;
 				break;
 			case 's':
-				this.y += 10;
+				this.y += step;
 				break;
 			case 'd':
-				this.x += 10;
+				this.x += step;
+				break;
+			default:
+				// Do nothing
 				break;
 		}
-	}
+	},
 
+	stop: function() {
+		this.direction = null;
+	}
 };

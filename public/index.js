@@ -14,28 +14,33 @@ module.exports = {
 		this.fillStyle = 'black';
 
 		// Bind keys
-		console.log('binding keys');
-		this.canvas.addEventListener('keydown', function(event) {
+		// console.log('binding keys');
+		this.canvas.addEventListener('keypress', function(event) {
 			switch(event.key){
 				case 'w' :
 				case 'a' :
 				case 's' :
 				case 'd' :
 				case ' ' :
-					console.log('key pressed');
-					Player.move(event.key);
+					Player.changeDirection(event.key);
 			}
-
-			// Set up player
-			Player.init(10, 10);
 		});
+
+		this.canvas.addEventListener('keyup', function(event) {
+			if(event.key == Player.direction){
+				Player.stop();
+			}
+		});
+
+		// Set up player
+		Player.init(10, 10, 20, 20);
 
 		// focus game area
 		this.canvas.focus();
 	},
 	start: function() {
 		// Fuck js. 'this' loses scope in refresh(), so I have to reference an anonymous function to keep scope
-		this.interval = setInterval(() => this.refresh(), 16.67);
+		this.interval = setInterval(() => this.refresh(), 10);
 	},
 
 	stop: function() {
@@ -43,10 +48,14 @@ module.exports = {
 	},
 
 	refresh: function() {
+		//clear previous contents
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
 		// Update positions
+		Player.move();
 
 		// Draw the new changes
-		this.context.fillRect(Player.x, Player.y, 100, 100);
+		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 	}
 
 
@@ -60,28 +69,42 @@ Game.start();
 },{"./game.js":1}],3:[function(require,module,exports){
 module.exports = {
 
-	init: function(x, y) {
+	direction: null,
+
+	init: function(x, y, width, height) {
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
 	},
 
-	move: function(key) {
-		console.log(key);
-		switch(key) {
+	changeDirection: function(key) {
+		this.direction = key;
+	},
+
+	move: function() {
+		var step = 5;
+		switch(this.direction) {
 			case 'w':
-				this.y -= 10;
+				this.y -= step;
 				break;
 			case 'a':
-				this.x -= 10;
+				this.x -= step;
 				break;
 			case 's':
-				this.y += 10;
+				this.y += step;
 				break;
 			case 'd':
-				this.x += 10;
+				this.x += step;
+				break;
+			default:
+				// Do nothing
 				break;
 		}
-	}
+	},
 
+	stop: function() {
+		this.direction = null;
+	}
 };
 },{}]},{},[1,2,3]);

@@ -18,5 +18,9 @@ module.exports = {
 			console.log('Compression complete');
 			return callback();
 		});	
-	}
+	},
+};
+
+if(process.argv[2] == 'manual'){
+	module.exports.compress(function(){});
 }
