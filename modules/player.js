@@ -1,6 +1,7 @@
 module.exports = {
 
 	direction: null,
+	maxSpeed: 20,
 
 	init: function(x, y, width, height) {
 		this.x = x;
@@ -18,12 +19,11 @@ module.exports = {
 	},
 
 	playerMove: function() {
-		var step = 10;
 		if(this.direction == 'a') {
-			this.x -= step;
+			this.x -= this.maxSpeed/2;
 		}
 		else if(this.direction == 'd') {
-			this.x += step;
+			this.x += this.maxSpeed/2;
 		}
 
 	},
@@ -31,14 +31,14 @@ module.exports = {
 	playerJump: function() {
 		if(this.canJump){
 			this.canJump = false;
-			this.velocity = 10;
+			this.velocity = this.maxSpeed;
 		}
 	},
 
 	gravity: function() {
 		var gravityValue =-1;
 		this.y -= this.velocity;
-		if(this.velocity > -10){
+		if(this.velocity > -this.maxSpeed*2){
 			this.velocity += gravityValue;
 		}
 	},

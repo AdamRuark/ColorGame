@@ -1,4 +1,5 @@
 var Player = require('./player.js');
+var LevelObjects = require('./levelObject.js');
 
 module.exports = {
 	canvas: document.getElementById('canvas'),
@@ -9,7 +10,7 @@ module.exports = {
 		this.canvas.width = 1000;
 		this.canvas.height = 1000;
 		this.context.globalAlpha = 1;
-		this.fillStyle = 'blue';
+		this.fillStyle = 'black';
 
 		// Bind keys
 		this.canvas.addEventListener('keypress', function(event) {
@@ -32,7 +33,11 @@ module.exports = {
 		// Set up player
 		Player.init(100, 100, 20, 20);
 
-		// focus game area
+		// Set up level
+		LevelObjects.newObj(300,900,100,100);
+		LevelObjects.newObj(800,900,100,100);
+
+		// Focus game area
 		this.canvas.focus();
 	},
 
@@ -45,7 +50,7 @@ module.exports = {
 	},
 
 	refresh: function() {
-		//clear previous contents
+		// Clear previous contents
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// Update positions
@@ -55,8 +60,14 @@ module.exports = {
 		if(!this.gravityCollision()) {
 			Player.gravity();
 		}
+
 		// Draw the new changes
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
+
+		for(var i = 0; i < LevelObjects.objects.length; i++){
+			var obj = LevelObjects.objects[i];
+			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
+		}
 	},
 
 	wallCollision() {
@@ -67,6 +78,8 @@ module.exports = {
 		else if(Player.direction == 'd' && Player.x + Player.width >= this.canvas.width) {
 			return true;
 		}
+
+
 		return false;
 	},
 
@@ -80,8 +93,14 @@ module.exports = {
       Player.y = 0;
 			return true;
 		}
+		for(var i = 0; i < LevelObjects.objects.length; i++){
+			var obj = LevelObjects.objects[i];
+			if(Player.y <= obj.y && Player.x >) {
+
+			}
+		}
+
 		return false;
 	}
-
 
 };
