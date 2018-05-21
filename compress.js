@@ -1,4 +1,5 @@
 var browserify = require('browserify')();
+var uglify = require('uglify-js');
 var fs = require('fs');
 var path = require('path');
 

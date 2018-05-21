@@ -3,3 +3,4 @@ package-lock.json
 ColorGame*
 index.min.js
 .idea
+/public/index.js
