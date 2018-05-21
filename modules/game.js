@@ -13,13 +13,14 @@ module.exports = {
 
 		// Bind keys
 		this.canvas.addEventListener('keypress', function(event) {
+			event.preventDefault();
 			switch(event.key){
 				case 'a' :
 				case 'd' :
 					Player.changeDirection(event.key);
 					break;
 				case ' ':
-					console.log("Jump");
+					Player.playerJump();
 			}
 		});
 		this.canvas.addEventListener('keyup', function(event) {
@@ -48,21 +49,21 @@ module.exports = {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// Update positions
-		if(!this.collisionCheck()) {
+		if(!this.wallCollision()) {
 			Player.playerMove();
 		}
-
-		/*if(!this.gravityCollision()) {
+		if(!this.gravityCollision()) {
 			Player.gravity();
-		}*/
+		}
+
+		console.log(Player.velocity);
 
 		// Draw the new changes
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 	},
 
-	collisionCheck() {
+	wallCollision() {
 		// Return true if a collision occurs, false otherwise
-		// console.log(Player.x + ", " + Player.y);
 		if(Player.direction == 'a' && Player.x <= 0) {
 			return true;
 		}
@@ -73,7 +74,8 @@ module.exports = {
 	},
 
 	gravityCollision() {
-		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height){
+		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height) {
+			Player.resetJump();
 			return true;
 		}
 		else if (Player.velocity >= 0 && Player.y <= 0) {

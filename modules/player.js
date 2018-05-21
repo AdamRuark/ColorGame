@@ -7,6 +7,8 @@ module.exports = {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.canJump = true;
+		this.velocity = 0;
 	},
 
 	changeDirection: function(key) {
@@ -16,21 +18,31 @@ module.exports = {
 
 	playerMove: function() {
 		var step = 10;
-		switch(this.direction) {
-			case 'a':
-				this.x -= step;
-				break;
-			case 'd':
-				this.x += step;
-				break;
-			default:
-				// Do nothing
-				break;
+		if(this.direction == 'a') {
+			this.x -= step;
+		}
+		else if(this.direction == 'd') {
+			this.x += step;
 		}
 
 	},
 
+	playerJump: function() {
+		if(this.canJump){
+			this.canJump = false;
+			this.velocity = 10;
+		}
+	},
+
 	stop: function() {
 		this.direction = null;
+	},
+	
+	resetJump: function() {
+		this.canJump = true;
+	},
+
+	gravity: function() {
+		//nothing yet
 	}
 };
