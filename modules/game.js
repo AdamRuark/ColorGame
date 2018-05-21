@@ -55,9 +55,6 @@ module.exports = {
 		if(!this.gravityCollision()) {
 			Player.gravity();
 		}
-
-		console.log(Player.velocity);
-
 		// Draw the new changes
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 	},
@@ -76,9 +73,11 @@ module.exports = {
 	gravityCollision() {
 		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height) {
 			Player.resetJump();
+			Player.y = this.canvas.height - Player.height;
 			return true;
 		}
 		else if (Player.velocity >= 0 && Player.y <= 0) {
+      Player.y = 0;
 			return true;
 		}
 		return false;

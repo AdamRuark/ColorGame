@@ -56,9 +56,6 @@ module.exports = {
 		if(!this.gravityCollision()) {
 			Player.gravity();
 		}
-
-		console.log(Player.velocity);
-
 		// Draw the new changes
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 	},
@@ -77,9 +74,11 @@ module.exports = {
 	gravityCollision() {
 		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height) {
 			Player.resetJump();
+			Player.y = this.canvas.height - Player.height;
 			return true;
 		}
 		else if (Player.velocity >= 0 && Player.y <= 0) {
+      Player.y = 0;
 			return true;
 		}
 		return false;
@@ -101,6 +100,7 @@ module.exports = {
 	init: function(x, y, width, height) {
 		this.x = x;
 		this.y = y;
+		this.velocity = 0;
 		this.width = width;
 		this.height = height;
 		this.canJump = true;
@@ -114,16 +114,11 @@ module.exports = {
 
 	playerMove: function() {
 		var step = 10;
-		switch(this.direction) {
-			case 'a':
-				this.x -= step;
-				break;
-			case 'd':
-				this.x += step;
-				break;
-			default:
-				// Do nothing
-				break;
+		if(this.direction == 'a') {
+			this.x -= step;
+		}
+		else if(this.direction == 'd') {
+			this.x += step;
 		}
 
 	},
@@ -135,16 +130,21 @@ module.exports = {
 		}
 	},
 
+	gravity: function() {
+		var gravityValue =-1;
+		this.y -= this.velocity;
+		if(this.velocity > -10){
+			this.velocity += gravityValue;
+		}
+	},
+
 	stop: function() {
 		this.direction = null;
 	},
 	
 	resetJump: function() {
 		this.canJump = true;
-	},
-
-	gravity: function() {
-		//nothing yet
 	}
+
 };
 },{}]},{},[1,2,3]);
