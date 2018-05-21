@@ -5,6 +5,7 @@ module.exports = {
 	init: function(x, y, width, height) {
 		this.x = x;
 		this.y = y;
+		this.velocity = 0;
 		this.width = width;
 		this.height = height;
 		this.canJump = true;
@@ -34,15 +35,20 @@ module.exports = {
 		}
 	},
 
+	gravity: function() {
+		var gravityValue =-1;
+		this.y -= this.velocity;
+		if(this.velocity > -10){
+			this.velocity += gravityValue;
+		}
+	},
+
 	stop: function() {
 		this.direction = null;
 	},
 	
 	resetJump: function() {
 		this.canJump = true;
-	},
-
-	gravity: function() {
-		//nothing yet
 	}
+
 };
