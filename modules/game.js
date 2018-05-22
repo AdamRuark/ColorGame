@@ -35,7 +35,7 @@ module.exports = {
 
 		// Set up level
 		LevelObjects.newObj(300,900,100,100);
-		LevelObjects.newObj(800,800,100,100);
+		LevelObjects.newObj(600,800,100,500);
 
 		// Focus game area
 		this.canvas.focus();
@@ -144,9 +144,15 @@ module.exports = {
 			// left/right
 			if(playerLeft < boxRight && playerRight > boxLeft) {
 				// player bottom
-				if(playerBot >= boxTop && playerTop <= boxTop){
+				if(playerBot == boxTop && playerTop == boxTop) {
+					console.log('on top');
+					Player.resetJump();
+				}
+				else if(playerBot > boxTop && playerTop < boxTop){
+					console.log('inside');
 					Player.y = boxTop - Player.height;
 					Player.velocity = 0;
+					// Player.resetJump();
 					return true;
 				}
 				// player top
@@ -157,10 +163,6 @@ module.exports = {
 			}
 		}
 		return false;
-	},
-
-	levelCollision() {
-		
 	}
 
 };
