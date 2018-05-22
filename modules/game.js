@@ -1,15 +1,15 @@
 var Player = require('./player.js');
-var LevelObjects = require('./levelObject.js');
 
 module.exports = {
 	canvas: document.getElementById('canvas'),
 	context: document.getElementById('canvas').getContext('2d'),
+	level: null,
 
 	init: function() {
 		// Set up canvas
 		this.canvas.width = 1000;
 		this.canvas.height = 1000;
-		this.context.globalAlpha = 1;
+		// this.context.globalAlpha = 1;
 		this.fillStyle = 'black';
 
 		// Bind keys
@@ -33,17 +33,16 @@ module.exports = {
 		// Set up player
 		Player.init(100, 100, 20, 20);
 
-		// Set up level
-		LevelObjects.newObj(300,900,100,100);
-		LevelObjects.newObj(600,800,100,500);
-
 		// Focus game area
 		this.canvas.focus();
 	},
 
+	newLevel: function(level) {
+		this.level = level;
+	},
+
 	start: function() {
 		// Draw level
-		
 		this.interval = setInterval(() => this.refresh(), 16.67);
 	},
 
@@ -55,12 +54,6 @@ module.exports = {
 		// Clear previous contents
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		for(var i = 0; i < LevelObjects.objects.length; i++){
-			var obj = LevelObjects.objects[i];
-			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
-		}
-
-
 		// Update positions
 		if(!this.horizontalCollisionHandler()) {
 			Player.playerMove();
@@ -68,20 +61,26 @@ module.exports = {
 		if(!this.verticalCollisionHandler()) {
 			Player.gravity();
 		}
-		
 
 		// Draw the new changes
+		this.context.fillStyle = Player.color;
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 
-
+		for(var i = 0; i < this.level.length; i++){
+			var obj = this.level[i];
+			this.context.fillStyle = obj.color;
+			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
+		}
 	},
 
 	horizontalCollisionHandler() {
 		// Canvas collision left/right
 		if(Player.direction == 'a' && Player.x <= 0) {
+			Player.x = 0;
 			return true;
 		}
 		else if(Player.direction == 'd' && Player.x + Player.width >= this.canvas.width) {
+			Player.x = this.canvas.width - Player.width;
 			return true;
 		}
 
@@ -91,8 +90,8 @@ module.exports = {
 		var playerLeft = Player.x;
 		var playerRight = Player.x + Player.width;
 
-		for(var i = 0; i < LevelObjects.objects.length; i++){
-			var obj = LevelObjects.objects[i];
+		for(var i = 0; i < this.level.length; i++){
+			var obj = this.level[i];
 			var boxBot = obj.y + obj.height;
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
@@ -101,8 +100,7 @@ module.exports = {
 			// top/bottom
 			if(playerTop < boxBot && playerBot > boxTop) {
 				//player left
-				if(playerRight >= boxLeft && playerLeft <= boxLeft && Player.direction == 'd'){
-					
+				if(playerRight >= boxLeft && playerLeft <= boxLeft && Player.direction == 'd') {
 					Player.x = boxLeft - Player.width;
 					return true;
 				}
@@ -134,8 +132,8 @@ module.exports = {
 		var playerLeft = Player.x;
 		var playerRight = Player.x + Player.width;
 
-		for(var i = 0; i < LevelObjects.objects.length; i++){
-			var obj = LevelObjects.objects[i];
+		for(var i = 0; i < this.level.length; i++){
+			var obj = this.level[i];
 			var boxBot = obj.y + obj.height;
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
@@ -144,21 +142,20 @@ module.exports = {
 			// left/right
 			if(playerLeft < boxRight && playerRight > boxLeft) {
 				// player bottom
-				if(playerBot >= boxTop && playerTop <= boxTop){
+				if(playerBot >= boxTop && playerTop <= boxTop && Player.velocity < 0){
 					Player.y = boxTop - Player.height;
-					if(Player.velocity < 0) {
-						Player.velocity = 0;
-					}
+					Player.velocity = 0;
 					Player.resetJump();
+					return true;
 				}
 				// player top
-				else if(playerTop <= boxBot && playerBot >= boxBot) {
+				else if(playerTop <= boxBot && playerBot >= boxBot && Player.velocity > 0) {
 					Player.y = boxBot;
-					Player.velocity *= -1;
+					Player.velocity  = 0;
+					return true;
 				}
 			}
 		}
 		return false;
 	}
-
 };

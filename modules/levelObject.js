@@ -1,13 +1,14 @@
+var fs = require('fs');
+
 module.exports = {
-	objects: [],
-	newObj: function (x, y, width, height) {
+	newObject: function (x, y, width, height, color) {
 		var obj = {
 			width: width,
 			height: height,
 			x: x,
-			y: y
+			y: y,
+			color: color
 		};
-		this.objects.push(obj);
+		return obj;
 	}
-
 };

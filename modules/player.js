@@ -1,5 +1,6 @@
 module.exports = {
 
+	color: 'black',
 	direction: null,
 	maxSpeed: 15,
 
@@ -9,7 +10,7 @@ module.exports = {
 		this.velocity = 0;
 		this.width = width;
 		this.height = height;
-		this.canJump = true;
+		this.canJump = false;
 		this.velocity = 0;
 	},
 
