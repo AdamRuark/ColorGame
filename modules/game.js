@@ -62,10 +62,10 @@ module.exports = {
 
 
 		// Update positions
-		if(!this.horizontalCollision()) {
+		if(!this.horizontalCollisionHandler()) {
 			Player.playerMove();
 		}
-		if(!this.verticalCollision()) {
+		if(!this.verticalCollisionHandler()) {
 			Player.gravity();
 		}
 		
@@ -76,7 +76,7 @@ module.exports = {
 
 	},
 
-	horizontalCollision() {
+	horizontalCollisionHandler() {
 		// Canvas collision left/right
 		if(Player.direction == 'a' && Player.x <= 0) {
 			return true;
@@ -116,7 +116,7 @@ module.exports = {
 		return false;
 	},
 
-	verticalCollision() {
+	verticalCollisionHandler() {
 		// Canvas collision top/bottom
 		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height) {
 			Player.resetJump();
@@ -144,16 +144,12 @@ module.exports = {
 			// left/right
 			if(playerLeft < boxRight && playerRight > boxLeft) {
 				// player bottom
-				if(playerBot == boxTop && playerTop == boxTop) {
-					console.log('on top');
-					Player.resetJump();
-				}
-				else if(playerBot > boxTop && playerTop < boxTop){
-					console.log('inside');
+				if(playerBot >= boxTop && playerTop <= boxTop){
 					Player.y = boxTop - Player.height;
-					Player.velocity = 0;
-					// Player.resetJump();
-					return true;
+					if(Player.velocity < 0) {
+						Player.velocity = 0;
+					}
+					Player.resetJump();
 				}
 				// player top
 				else if(playerTop <= boxBot && playerBot >= boxBot) {
