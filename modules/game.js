@@ -35,13 +35,15 @@ module.exports = {
 
 		// Set up level
 		LevelObjects.newObj(300,900,100,100);
-		LevelObjects.newObj(800,900,100,100);
+		LevelObjects.newObj(800,800,100,100);
 
 		// Focus game area
 		this.canvas.focus();
 	},
 
 	start: function() {
+		// Draw level
+		
 		this.interval = setInterval(() => this.refresh(), 16.67);
 	},
 
@@ -53,25 +55,29 @@ module.exports = {
 		// Clear previous contents
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		// Update positions
-		if(!this.wallCollision()) {
-			Player.playerMove();
-		}
-		if(!this.gravityCollision()) {
-			Player.gravity();
-		}
-
-		// Draw the new changes
-		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
-
 		for(var i = 0; i < LevelObjects.objects.length; i++){
 			var obj = LevelObjects.objects[i];
 			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
 		}
+
+
+		// Update positions
+		if(!this.horizontalCollision()) {
+			Player.playerMove();
+		}
+		if(!this.verticalCollision()) {
+			Player.gravity();
+		}
+		
+
+		// Draw the new changes
+		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
+
+
 	},
 
-	wallCollision() {
-		// Return true if a collision occurs, false otherwise
+	horizontalCollision() {
+		// Canvas collision left/right
 		if(Player.direction == 'a' && Player.x <= 0) {
 			return true;
 		}
@@ -79,28 +85,82 @@ module.exports = {
 			return true;
 		}
 
+		// Level collision left/right
+		var playerBot = Player.y + Player.height;
+		var playerTop = Player.y;
+		var playerLeft = Player.x;
+		var playerRight = Player.x + Player.width;
 
+		for(var i = 0; i < LevelObjects.objects.length; i++){
+			var obj = LevelObjects.objects[i];
+			var boxBot = obj.y + obj.height;
+			var boxTop = obj.y;
+			var boxLeft = obj.x;
+			var boxRight = obj.x + obj.width;
+
+			// top/bottom
+			if(playerTop < boxBot && playerBot > boxTop) {
+				//player left
+				if(playerRight >= boxLeft && playerLeft <= boxLeft && Player.direction == 'd'){
+					
+					Player.x = boxLeft - Player.width;
+					return true;
+				}
+				//player right
+				else if(playerLeft <= boxRight && playerRight >= boxRight && Player.direction == 'a') {
+					Player.x = boxRight;
+					return true;
+				}
+			}
+		}
 		return false;
 	},
 
-	gravityCollision() {
+	verticalCollision() {
+		// Canvas collision top/bottom
 		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height) {
 			Player.resetJump();
 			Player.y = this.canvas.height - Player.height;
 			return true;
 		}
 		else if (Player.velocity >= 0 && Player.y <= 0) {
-      Player.y = 0;
+      		Player.y = 0;
 			return true;
 		}
+
+		// Level collision top/bottom
+		var playerBot = Player.y + Player.height;
+		var playerTop = Player.y;
+		var playerLeft = Player.x;
+		var playerRight = Player.x + Player.width;
+
 		for(var i = 0; i < LevelObjects.objects.length; i++){
 			var obj = LevelObjects.objects[i];
-			if(Player.y <= obj.y && Player.x >) {
+			var boxBot = obj.y + obj.height;
+			var boxTop = obj.y;
+			var boxLeft = obj.x;
+			var boxRight = obj.x + obj.width;
 
+			// left/right
+			if(playerLeft < boxRight && playerRight > boxLeft) {
+				// player bottom
+				if(playerBot >= boxTop && playerTop <= boxTop){
+					Player.y = boxTop - Player.height;
+					Player.velocity = 0;
+					return true;
+				}
+				// player top
+				else if(playerTop <= boxBot && playerBot >= boxBot) {
+					Player.y = boxBot;
+					Player.velocity *= -1;
+				}
 			}
 		}
-
 		return false;
+	},
+
+	levelCollision() {
+		
 	}
 
 };

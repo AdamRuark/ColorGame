@@ -4,14 +4,8 @@ module.exports = {
 		var obj = {
 			width: width,
 			height: height,
-
-			coords: [
-				[x,y],
-				[x + width, y],
-				[x + width, y + height],
-				[x, y + height]
-			]
-
+			x: x,
+			y: y
 		};
 		this.objects.push(obj);
 	}

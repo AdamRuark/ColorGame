@@ -1,7 +1,7 @@
 module.exports = {
 
 	direction: null,
-	maxSpeed: 20,
+	maxSpeed: 15,
 
 	init: function(x, y, width, height) {
 		this.x = x;
