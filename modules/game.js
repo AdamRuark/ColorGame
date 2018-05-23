@@ -9,7 +9,6 @@ module.exports = {
 		// Set up canvas
 		this.canvas.width = 1000;
 		this.canvas.height = 1000;
-		// this.context.globalAlpha = 1;
 		this.fillStyle = 'black';
 
 		// Bind keys
