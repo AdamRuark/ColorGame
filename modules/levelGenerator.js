@@ -7,15 +7,17 @@ module.exports = {
 		'b': 'blue',
 		'g': 'green',
 		'y': 'yellow',
-		'o': 'orange'
+		'o': 'orange',
+		'e': 'gold'
 
 	},
 
 	init: function(level, callback) {
 		var self = this;
-		fetch(level).then(function(response) {
+		return fetch(level).then(function(response) {
 			response.json().then(function(data) {
 				callback(self.generate(data));
+
 			})
 		});
 	},
@@ -23,7 +25,7 @@ module.exports = {
 	generate: function(data) {
 		var level = {
 			spawn: {},
-			objects: []
+			objects: [],
 		};
 		for(var i = 0; i < data.length; i++){
 			for(var j = 0; j < data[i].length; j++){
@@ -32,16 +34,14 @@ module.exports = {
 					level.spawn.x = j * 50;
 					level.spawn.y = i * 50;
 				}
-				// Get exit
-				else if(data[i][j] == 'e') {
-
-				}
-
 				else if(data[i][j] != '.') {
+					var type = null;
+					if(data[i][j] == 'e'){
+						type = 'exit';
+					}
 					var color = this.pattern[data[i][j]];
-					level.objects.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color));
+					level.objects.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
 				}
-
 			}
 		}
 		return level;

@@ -4,7 +4,7 @@ module.exports = {
 	canvas: document.getElementById('canvas'),
 	context: document.getElementById('canvas').getContext('2d'),
 	level: null,
-	run: true,
+	levelEnd: false,
 
 	init: function() {
 		// Set up canvas
@@ -14,7 +14,6 @@ module.exports = {
 
 		// Bind keys
 		this.canvas.addEventListener('keydown', function(event) {
-			event.preventDefault();
 			switch(event.key){
 				case 'a' :
 				case 'd' :
@@ -23,6 +22,7 @@ module.exports = {
 					Player.changeDirection(event.key);
 					break;
 				case ' ':
+					event.preventDefault();
 					Player.playerJump();
 			}
 		});
@@ -45,11 +45,12 @@ module.exports = {
 	},
 
 	newLevel: function(level) {
-		this.level = level.objects;
+		this.level = level;
+		this.levelEnd = false;
 		Player.init(level.spawn, 25, 25);
 	},
 
-	start: function() {
+	start: async function() {
 		this.interval = setInterval(() => this.refresh(), 16.67);
 	},
 
@@ -73,14 +74,15 @@ module.exports = {
 		this.context.fillStyle = Player.color;
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 
-		for(var i = 0; i < this.level.length; i++){
-			var obj = this.level[i];
+		for(var i = 0; i < this.level.objects.length; i++){
+			var obj = this.level.objects[i];
 			this.context.fillStyle = obj.color;
 			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
 		}
 
 		// Check for level end conditions
-		if() {
+		if(this.levelEnd) {
+			console.log("Exit");
 			this.stop();
 		}
 	},
@@ -102,8 +104,8 @@ module.exports = {
 		var playerLeft = Player.x;
 		var playerRight = Player.x + Player.width;
 
-		for(var i = 0; i < this.level.length; i++){
-			var obj = this.level[i];
+		for(var i = 0; i < this.level.objects.length; i++){
+			var obj = this.level.objects[i];
 			var boxBot = obj.y + obj.height;
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
@@ -114,11 +116,17 @@ module.exports = {
 				//player left
 				if(playerRight >= boxLeft && playerLeft <= boxLeft && Player.direction == 'd') {
 					Player.x = boxLeft - Player.width;
+					if(obj.type == 'exit') {
+						this.levelEnd = true;
+					}
 					return true;
 				}
 				//player right
 				else if(playerLeft <= boxRight && playerRight >= boxRight && Player.direction == 'a') {
 					Player.x = boxRight;
+					if(obj.type == 'exit') {
+						this.levelEnd = true;
+					}
 					return true;
 				}
 			}
@@ -144,8 +152,8 @@ module.exports = {
 		var playerLeft = Player.x;
 		var playerRight = Player.x + Player.width;
 
-		for(var i = 0; i < this.level.length; i++){
-			var obj = this.level[i];
+		for(var i = 0; i < this.level.objects.length; i++){
+			var obj = this.level.objects[i];
 			var boxBot = obj.y + obj.height;
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
@@ -158,12 +166,18 @@ module.exports = {
 					Player.y = boxTop - Player.height;
 					Player.velocity = 0;
 					Player.resetJump();
+					if(obj.type == 'exit') {
+						this.levelEnd = true;
+					}
 					return true;
 				}
 				// player top
 				else if(playerTop <= boxBot && playerBot >= boxBot && Player.velocity > 0) {
 					Player.y = boxBot;
 					Player.velocity  = 0;
+					if(obj.type == 'exit') {
+						this.levelEnd = true;
+					}
 					return true;
 				}
 			}

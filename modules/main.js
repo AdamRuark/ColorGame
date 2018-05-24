@@ -1,15 +1,30 @@
 var Game = require('./game.js');
 var LevelGenerator = require('./levelGenerator');
 
-var numLevels = 1;
 Game.init();
 
-for(var i = 0; i < numLevels; i++) {
-	LevelGenerator.init('/level/' + (i+1), function(level){
+
+console.log("Start");
+/*LevelGenerator.init('/level/' + 1, function(level){
+	Game.newLevel(level);
+	Game.start();
+	return new Promise(resolve => {
+		resolve('resolved');
+	});
+});*/
+
+async function levelLoop() {
+	var i = 1;
+	var numLevels = 1;
+
+	var temp = await LevelGenerator.init('/level/' + i, function(level){
 		Game.newLevel(level);
 		Game.start();
 	});
 }
+
+levelLoop();
+
 
 
 
