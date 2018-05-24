@@ -46,7 +46,6 @@ module.exports = {
 	newLevel: function(level) {
 		this.level = level.objects;
 		Player.init(level.spawn, 25, 25);
-		console.log(Player.x + ", " + Player.y);
 	},
 
 	start: function() {

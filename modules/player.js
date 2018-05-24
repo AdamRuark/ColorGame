@@ -5,8 +5,7 @@ module.exports = {
 	maxSpeed: 15,
 
 	init: function(spawn, width, height) {
-		console.log(spawn);
-		this.x = spawn.x + 13;
+		this.x = spawn.x;
 		this.y = spawn.y + 25;
 		this.velocity = 0;
 		this.width = width;
