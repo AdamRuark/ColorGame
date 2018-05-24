@@ -4,9 +4,10 @@ module.exports = {
 	direction: null,
 	maxSpeed: 15,
 
-	init: function(x, y, width, height) {
-		this.x = x;
-		this.y = y;
+	init: function(spawn, width, height) {
+		console.log(spawn);
+		this.x = spawn.x + 13;
+		this.y = spawn.y + 25;
 		this.velocity = 0;
 		this.width = width;
 		this.height = height;

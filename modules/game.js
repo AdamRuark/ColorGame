@@ -14,7 +14,6 @@ module.exports = {
 		// Bind keys
 		this.canvas.addEventListener('keydown', function(event) {
 			event.preventDefault();
-			// console.log(event.key);
 			switch(event.key){
 				case 'a' :
 				case 'd' :
@@ -34,25 +33,23 @@ module.exports = {
 			else if(key == 'ArrowRight') {
 				key = 'd';
 			}
-			
+
 			if(key == Player.direction){
 				Player.stop();
 			}
 		});
-
-		// Set up player
-		Player.init(100, 100, 20, 20);
 
 		// Focus game area
 		this.canvas.focus();
 	},
 
 	newLevel: function(level) {
-		this.level = level;
+		this.level = level.objects;
+		Player.init(level.spawn, 25, 25);
+		console.log(Player.x + ", " + Player.y);
 	},
 
 	start: function() {
-		// Draw level
 		this.interval = setInterval(() => this.refresh(), 16.67);
 	},
 

@@ -1,8 +1,11 @@
 var Game = require('./game.js');
 var LevelGenerator = require('./levelGenerator');
 
-LevelGenerator.init('/level/1');
+var currentLevel = 1;
 Game.init();
-Game.newLevel(LevelGenerator.objects);
+
+LevelGenerator.init('/level/' + currentLevel, function(){
+	Game.newLevel(LevelGenerator);
+});
 
 Game.start();

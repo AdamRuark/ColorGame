@@ -2,6 +2,7 @@ var LevelObjects = require('./levelObject');
 
 module.exports = {
 	objects: [],
+	spawn: {},
 
 	pattern: {
 		'x': 'black',
@@ -13,29 +14,30 @@ module.exports = {
 
 	},
 
-	init: function(level) {
+	init: function(level, callback) {
 		var self = this;
 		fetch(level).then(function(response) {
 			response.json().then(function(data) {
 				self.generate(data);
+				callback();
 			})
 		});
 	},
 
 	generate: function(data) {
-		// console.log(this.objects);
 		for(var i = 0; i < data.length; i++){
 			for(var j = 0; j < data[i].length; j++){
-				if(data[i][j] != '.') {
-					// console.log(data[i][j] + " .");
-					// console.log(i + ", " + j);
+				// Get spawn point
+				if(data[i][j] == 's') {
+					this.spawn.x = j * 50;
+					this.spawn.y = i * 50;
+				}
+				else if(data[i][j] != '.') {
 					var color = this.pattern[data[i][j]];
 					this.objects.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color));
 				}
 
 			}
 		}
-		console.log(data[0][0].charCodeAt(0));
-		console.log(".".charCodeAt(0));
 	}
 };
