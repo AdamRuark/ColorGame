@@ -12,11 +12,14 @@ module.exports = {
 		this.fillStyle = 'black';
 
 		// Bind keys
-		this.canvas.addEventListener('keypress', function(event) {
+		this.canvas.addEventListener('keydown', function(event) {
 			event.preventDefault();
+			// console.log(event.key);
 			switch(event.key){
 				case 'a' :
 				case 'd' :
+				case 'ArrowLeft' :
+				case 'ArrowRight' :
 					Player.changeDirection(event.key);
 					break;
 				case ' ':
@@ -24,7 +27,15 @@ module.exports = {
 			}
 		});
 		this.canvas.addEventListener('keyup', function(event) {
-			if(event.key == Player.direction){
+			var key = event.key;
+			if(key == 'ArrowLeft') {
+				key = 'a';
+			}
+			else if(key == 'ArrowRight') {
+				key = 'd';
+			}
+			
+			if(key == Player.direction){
 				Player.stop();
 			}
 		});

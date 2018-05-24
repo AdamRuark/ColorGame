@@ -15,16 +15,27 @@ module.exports = {
 	},
 
 	changeDirection: function(key) {
-		this.prev_dir = this.direction;
-		this.direction = key;
+		if(key == 'ArrowLeft') {
+			this.direction = 'a';
+		}
+		else if (key == 'ArrowRight') {
+			this.direction = 'd';
+		}
+		else {
+			this.direction = key;		
+		}
 	},
 
 	playerMove: function() {
-		if(this.direction == 'a') {
-			this.x -= this.maxSpeed/2;
-		}
-		else if(this.direction == 'd') {
-			this.x += this.maxSpeed/2;
+		switch(this.direction) {
+			case 'a' :
+			case 'ArrowLeft' :
+				this.x -= this.maxSpeed/2;
+				break;
+			case 'd':
+			case 'ArrowRight' :
+				this.x += this.maxSpeed/2;
+				break;
 		}
 
 	},

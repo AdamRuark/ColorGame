@@ -16,4 +16,6 @@ body {
 	display: flex;
 	justify-content: center;
 	background-color: #676767;
+	width: 100%;
+	height: 100%;
 }
