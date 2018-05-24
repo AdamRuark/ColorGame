@@ -4,6 +4,7 @@ module.exports = {
 	canvas: document.getElementById('canvas'),
 	context: document.getElementById('canvas').getContext('2d'),
 	level: null,
+	run: true,
 
 	init: function() {
 		// Set up canvas
@@ -76,6 +77,11 @@ module.exports = {
 			var obj = this.level[i];
 			this.context.fillStyle = obj.color;
 			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
+		}
+
+		// Check for level end conditions
+		if() {
+			this.stop();
 		}
 	},
 
