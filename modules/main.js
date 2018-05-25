@@ -1,26 +1,26 @@
 var Game = require('./game.js');
 var LevelGenerator = require('./levelGenerator');
 
+var curLevel = 1;
+var numLevels = 2;
+
 Game.init();
-
-
-console.log("Start");
-/*LevelGenerator.init('/level/' + 1, function(level){
-	Game.newLevel(level);
-	Game.start();
-	return new Promise(resolve => {
-		resolve('resolved');
-	});
-});*/
-
 async function levelLoop() {
-	var i = 1;
-	var numLevels = 1;
+	var response = await fetch('/level/' + curLevel);
+	var data = await response.json();
+	var level = LevelGenerator.generate(data);
 
-	var temp = await LevelGenerator.init('/level/' + i, function(level){
-		Game.newLevel(level);
-		Game.start();
-	});
+	Game.newLevel(level);
+	interval = setInterval(() => {
+		Game.refresh();
+		if(Game.levelEnd) {
+			clearInterval(interval);
+			curLevel++;
+			if(curLevel <= numLevels){
+				levelLoop();
+			}
+		}
+	}, 16.67);
 }
 
 levelLoop();

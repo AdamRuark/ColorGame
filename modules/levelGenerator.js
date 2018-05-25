@@ -6,20 +6,10 @@ module.exports = {
 		'r': 'red',
 		'b': 'blue',
 		'g': 'green',
-		'y': 'yellow',
+		'y': 'gold',
 		'o': 'orange',
-		'e': 'gold'
+		'e': 'grey'
 
-	},
-
-	init: function(level, callback) {
-		var self = this;
-		return fetch(level).then(function(response) {
-			response.json().then(function(data) {
-				callback(self.generate(data));
-
-			})
-		});
 	},
 
 	generate: function(data) {

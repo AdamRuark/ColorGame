@@ -4,7 +4,6 @@ module.exports = {
 	canvas: document.getElementById('canvas'),
 	context: document.getElementById('canvas').getContext('2d'),
 	level: null,
-	levelEnd: false,
 
 	init: function() {
 		// Set up canvas
@@ -50,14 +49,6 @@ module.exports = {
 		Player.init(level.spawn, 25, 25);
 	},
 
-	start: async function() {
-		this.interval = setInterval(() => this.refresh(), 16.67);
-	},
-
-	stop: function() {
-		clearInterval(this.interval);
-	},
-
 	refresh: function() {
 		// Clear previous contents
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -78,12 +69,6 @@ module.exports = {
 			var obj = this.level.objects[i];
 			this.context.fillStyle = obj.color;
 			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
-		}
-
-		// Check for level end conditions
-		if(this.levelEnd) {
-			console.log("Exit");
-			this.stop();
 		}
 	},
 
