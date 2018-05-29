@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 module.exports = {
-	newObject: function (x, y, width, height, color, type) {
+	newObject: function(x, y, width, height, color, type) {
 		var obj = {
 			width: width,
 			height: height,

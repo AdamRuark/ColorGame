@@ -53,6 +53,10 @@ module.exports = {
 		// Clear previous contents
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+		// if(this.tokenCollision()){
+		// 	Player.addToken()
+		// }
+
 		// Update positions
 		if(!this.horizontalCollisionHandler()) {
 			Player.playerMove();
@@ -61,10 +65,22 @@ module.exports = {
 			Player.gravity();
 		}
 
-		// Draw the new changes
+		// Draw player
 		this.context.fillStyle = Player.color;
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 
+		// Draw tokens
+		for(var i = 0; i < this.level.tokens.length; i++) {
+			var obj = this.level.tokens[i];
+			var rad = obj.width/2;
+			this.context.fillStyle = obj.color;
+			this.context.beginPath();
+			this.context.arc(obj.x + rad, obj.y + rad, rad, 0, 2*Math.PI);
+			this.context.fill();
+			this.context.closePath();
+		}
+		
+		// Draw terrain
 		for(var i = 0; i < this.level.objects.length; i++){
 			var obj = this.level.objects[i];
 			this.context.fillStyle = obj.color;

@@ -13,6 +13,7 @@ app.use(express.static('public'));
 app.get('/level/:num', function(req, res) {
 	console.log('Get level:' + req.params.num);
 	if(req.params.num > numLevels) {
+		// Send empty level
 		res.send({});
 	}
 	else {

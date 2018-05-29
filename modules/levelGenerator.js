@@ -9,13 +9,13 @@ module.exports = {
 		'y': 'gold',
 		'o': 'orange',
 		'e': 'grey'
-
 	},
 
 	generate: function(data) {
 		var level = {
 			spawn: {},
 			objects: [],
+			tokens: []
 		};
 		for(var i = 0; i < data.length; i++){
 			for(var j = 0; j < data[i].length; j++){
@@ -24,13 +24,23 @@ module.exports = {
 					level.spawn.x = j * 50;
 					level.spawn.y = i * 50;
 				}
+				
 				else if(data[i][j] != '.') {
 					var type = null;
 					if(data[i][j] == 'e'){
 						type = 'exit';
 					}
+					else if(data[i][j].includes('t')){
+						type = 'token';
+						data[i][j] = data[i][j].charAt(1);
+					}
 					var color = this.pattern[data[i][j]];
-					level.objects.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
+					if(type == 'token') {
+						level.tokens.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
+					}
+					else {
+						level.objects.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
+					}
 				}
 			}
 		}

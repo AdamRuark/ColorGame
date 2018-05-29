@@ -6,7 +6,6 @@ var curLevel = 1;
 Game.init();
 async function levelLoop() {
 	var response = await fetch('/level/' + curLevel);
-
 	var data = await response.json();
 
 	// No possible level
