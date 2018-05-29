@@ -15,7 +15,8 @@ module.exports = {
 		var level = {
 			spawn: {},
 			objects: [],
-			tokens: []
+			tokens: [],
+			curtok: null
 		};
 		for(var i = 0; i < data.length; i++){
 			for(var j = 0; j < data[i].length; j++){

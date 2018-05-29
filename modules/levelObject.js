@@ -8,7 +8,8 @@ module.exports = {
 			x: x,
 			y: y,
 			color: color,
-			type: type
+			type: type,
+			active: true
 		};
 		return obj;
 	}

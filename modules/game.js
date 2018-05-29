@@ -53,9 +53,11 @@ module.exports = {
 		// Clear previous contents
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		// if(this.tokenCollision()){
-		// 	Player.addToken()
-		// }
+		if(this.tokenCollisionHandler()){
+			this.canvas.style.backgroundColor = this.level.curtok.color;
+			this.changeBlocks(this.level.curtok.color);
+			console.log("Hit token");
+		}
 
 		// Update positions
 		if(!this.horizontalCollisionHandler()) {
@@ -83,12 +85,41 @@ module.exports = {
 		// Draw terrain
 		for(var i = 0; i < this.level.objects.length; i++){
 			var obj = this.level.objects[i];
+			if(obj.active == false) {
+				continue;
+			}
 			this.context.fillStyle = obj.color;
 			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
 		}
 	},
 
-	horizontalCollisionHandler() {
+	tokenCollisionHandler: function() {
+		var playerBot = Player.y + Player.height;
+		var playerTop = Player.y;
+		var playerLeft = Player.x;
+		var playerRight = Player.x + Player.width;
+
+		for(var i = 0; i < this.level.tokens.length; i++) {
+			var obj = this.level.tokens[i];
+			var boxBot = obj.y + obj.height;
+			var boxTop = obj.y;
+			var boxLeft = obj.x;
+			var boxRight = obj.x + obj.width;
+
+			if(playerTop < boxBot && playerBot > boxTop && playerLeft < boxRight && playerRight > boxLeft) {
+				if(this.level.curtok != null) {
+					this.level.tokens.push(this.level.curtok);
+				}
+				this.level.curtok = this.level.tokens[i];
+				this.level.tokens.splice(i, 1);
+				i--;
+				return true;
+			}
+		}
+		return false;
+	},
+
+	horizontalCollisionHandler: function() {
 		// Canvas collision left/right
 		if(Player.direction == 'a' && Player.x <= 0) {
 			Player.x = 0;
@@ -111,6 +142,10 @@ module.exports = {
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
 			var boxRight = obj.x + obj.width;
+
+			if(obj.active == false) {
+				continue;
+			}
 
 			// top/bottom
 			if(playerTop < boxBot && playerBot > boxTop) {
@@ -135,7 +170,7 @@ module.exports = {
 		return false;
 	},
 
-	verticalCollisionHandler() {
+	verticalCollisionHandler: function() {
 		// Canvas collision top/bottom
 		if(Player.velocity < 0 && Player.y + Player.height >= this.canvas.height) {
 			Player.resetJump();
@@ -143,7 +178,7 @@ module.exports = {
 			return true;
 		}
 		else if (Player.velocity >= 0 && Player.y <= 0) {
-      		Player.y = 0;
+			Player.y = 0;
 			return true;
 		}
 
@@ -159,6 +194,10 @@ module.exports = {
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
 			var boxRight = obj.x + obj.width;
+
+			if(obj.active == false) {
+				continue;
+			}
 
 			// left/right
 			if(playerLeft < boxRight && playerRight > boxLeft) {
@@ -184,5 +223,16 @@ module.exports = {
 			}
 		}
 		return false;
+	},
+
+	changeBlocks: function(color) {
+		for(var i = 0; i < this.level.objects.length; i++) {
+			if(this.level.objects[i].color == color){
+				this.level.objects[i].active = false;
+			}
+			else {
+				this.level.objects[i].active = true;
+			}
+		}
 	}
 };
