@@ -46,6 +46,7 @@ module.exports = {
 	newLevel: function(level) {
 		this.level = level;
 		this.levelEnd = false;
+		this.canvas.style.backgroundColor = 'white';
 		Player.init(level.spawn, 25, 25);
 	},
 

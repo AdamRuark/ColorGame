@@ -3,11 +3,10 @@ var LevelObjects = require('./levelObject');
 module.exports = {
 	pattern: {
 		'x': 'black',
-		'r': 'red',
-		'b': 'blue',
-		'g': 'green',
-		'y': 'gold',
-		'o': 'orange',
+		'r': '#C63B3B',
+		'b': '#247777',
+		'g': '#2F9F2F',
+		'o': '#C67A3B',
 		'e': 'grey'
 	},
 
