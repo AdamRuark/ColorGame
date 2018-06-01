@@ -4,13 +4,26 @@
 	<head>
 		<title>Colors</title>
 		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 	</head>
 
+	<body>
+		<h1 id="game-name">Colors</h1>
 
-	<div id="main-game">
-		<canvas id="canvas" tabindex="1"></canvas>
-	</div>
+		<div id="main-game">
+			<div id="palette" class="sidebar">
+				<div class="sidebar-header">Palette</div>
+				<div id="color-wheel">
+					<div class="color selected"></div>
+				</div>
+			</div>
+			<canvas id="canvas" tabindex="1"></canvas>
+			<div id="statisics" class="sidebar">
+				<div class="sidebar-header">Level</div>
+			</div>
+		</div>
+	</body>
+	
 	
 	<script type="text/javascript" src="index.js"></script>
 
