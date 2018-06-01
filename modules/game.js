@@ -1,4 +1,6 @@
 var Player = require('./player.js');
+var Palette = require('./palette.js');
+
 
 module.exports = {
 	canvas: document.getElementById('canvas'),
@@ -44,10 +46,11 @@ module.exports = {
 	},
 
 	newLevel: function(level) {
-		this.level = level;
+		this.level = level[0];
+		Palette.init(level[1]);
 		this.levelEnd = false;
 		this.canvas.style.backgroundColor = 'white';
-		Player.init(level.spawn, 25, 25);
+		Player.init(this.level.spawn, 25, 25);
 	},
 
 	refresh: function() {
@@ -55,9 +58,9 @@ module.exports = {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		if(this.tokenCollisionHandler()){
-			this.canvas.style.backgroundColor = this.level.curtok.color;
-			this.changeBlocks(this.level.curtok.color);
-			console.log("Hit token");
+			var color = Palette.getActive().color;
+			this.canvas.style.backgroundColor = color;
+			this.changeBlocks(color);
 		}
 
 		// Update positions
@@ -73,8 +76,8 @@ module.exports = {
 		this.context.fillRect(Player.x, Player.y, Player.width, Player.height);
 
 		// Draw tokens
-		for(var i = 0; i < this.level.tokens.length; i++) {
-			var obj = this.level.tokens[i];
+		for(var i = 0; i < Palette.tokens.length; i++) {
+			var obj = Palette.tokens[i];
 			var rad = obj.width/2;
 			this.context.fillStyle = obj.color;
 			this.context.beginPath();
@@ -86,7 +89,7 @@ module.exports = {
 		// Draw terrain
 		for(var i = 0; i < this.level.objects.length; i++){
 			var obj = this.level.objects[i];
-			if(obj.active == false) {
+			if(!obj.active) {
 				continue;
 			}
 			this.context.fillStyle = obj.color;
@@ -100,19 +103,16 @@ module.exports = {
 		var playerLeft = Player.x;
 		var playerRight = Player.x + Player.width;
 
-		for(var i = 0; i < this.level.tokens.length; i++) {
-			var obj = this.level.tokens[i];
+		for(var i = 0; i < Palette.tokens.length; i++) {
+			var obj = Palette.tokens[i];
 			var boxBot = obj.y + obj.height;
 			var boxTop = obj.y;
 			var boxLeft = obj.x;
 			var boxRight = obj.x + obj.width;
 
 			if(playerTop < boxBot && playerBot > boxTop && playerLeft < boxRight && playerRight > boxLeft) {
-				if(this.level.curtok != null) {
-					this.level.tokens.push(this.level.curtok);
-				}
-				this.level.curtok = this.level.tokens[i];
-				this.level.tokens.splice(i, 1);
+				
+				Palette.addToCollection(i);
 				i--;
 				return true;
 			}
@@ -196,7 +196,7 @@ module.exports = {
 			var boxLeft = obj.x;
 			var boxRight = obj.x + obj.width;
 
-			if(obj.active == false) {
+			if(!obj.active) {
 				continue;
 			}
 
@@ -228,12 +228,7 @@ module.exports = {
 
 	changeBlocks: function(color) {
 		for(var i = 0; i < this.level.objects.length; i++) {
-			if(this.level.objects[i].color == color){
-				this.level.objects[i].active = false;
-			}
-			else {
-				this.level.objects[i].active = true;
-			}
+			this.level.objects[i].active = !(this.level.objects[i].color == color);
 		}
 	}
 };

@@ -13,13 +13,12 @@ module.exports = {
 	generate: function(data) {
 		var level = {
 			spawn: {},
-			objects: [],
-			tokens: [],
-			curtok: null
+			objects: []
 		};
+		var tokens = [];
+
 		for(var i = 0; i < data.length; i++){
 			for(var j = 0; j < data[i].length; j++){
-				// Get spawn point
 				if(data[i][j] == 's') {
 					level.spawn.x = j * 50;
 					level.spawn.y = i * 50;
@@ -36,7 +35,7 @@ module.exports = {
 					}
 					var color = this.pattern[data[i][j]];
 					if(type == 'token') {
-						level.tokens.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
+						tokens.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
 					}
 					else {
 						level.objects.push(LevelObjects.newObject(j * 50, i * 50, 50, 50, color, type));
@@ -44,6 +43,6 @@ module.exports = {
 				}
 			}
 		}
-		return level;
+		return [level, tokens];
 	}
 };

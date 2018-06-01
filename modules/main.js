@@ -1,5 +1,5 @@
 var Game = require('./game.js');
-var LevelGenerator = require('./levelGenerator');
+var LevelGenerator = require('./levelGenerator.js');
 
 var curLevel = 1;
 
@@ -26,7 +26,3 @@ async function levelLoop() {
 }
 
 levelLoop();
-
-
-
-
