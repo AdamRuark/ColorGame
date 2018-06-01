@@ -13,6 +13,7 @@ async function levelLoop() {
 		window.open('index.html', '_self');
 	}
 	var level = LevelGenerator.generate(data);
+	document.getElementById('level-num').innerHTML = curLevel;
 
 	Game.newLevel(level);
 	interval = setInterval(() => {

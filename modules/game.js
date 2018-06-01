@@ -58,7 +58,7 @@ module.exports = {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		if(this.tokenCollisionHandler()){
-			var color = Palette.getActive().color;
+			var color = Palette.getActive();
 			this.canvas.style.backgroundColor = color;
 			this.changeBlocks(color);
 		}
