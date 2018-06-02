@@ -25,6 +25,10 @@ module.exports = {
 				case ' ':
 					event.preventDefault();
 					Player.playerJump();
+					break;
+				case 'w':
+				case 's':
+					Palette.changeActive(event.key);
 			}
 		});
 		this.canvas.addEventListener('keyup', function(event) {
@@ -58,9 +62,7 @@ module.exports = {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		if(this.tokenCollisionHandler()){
-			var color = Palette.getActive();
-			this.canvas.style.backgroundColor = color;
-			this.changeBlocks(color);
+			this.canvas.style.backgroundColor = Palette.getActive();
 		}
 
 		// Update positions
@@ -95,6 +97,10 @@ module.exports = {
 			this.context.fillStyle = obj.color;
 			this.context.fillRect(obj.x, obj.y, obj.width, obj.height);
 		}
+
+		// Change the active blocks and colors
+		this.canvas.style.backgroundColor = Palette.getActive();
+		this.changeBlocks(Palette.getActive());
 	},
 
 	tokenCollisionHandler: function() {
@@ -111,7 +117,6 @@ module.exports = {
 			var boxRight = obj.x + obj.width;
 
 			if(playerTop < boxBot && playerBot > boxTop && playerLeft < boxRight && playerRight > boxLeft) {
-				
 				Palette.addToCollection(i);
 				i--;
 				return true;
