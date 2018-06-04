@@ -28,7 +28,12 @@ module.exports = {
 					break;
 				case 'w':
 				case 's':
-					Palette.changeActive(event.key);
+				case 'ArrowUp':
+				case 'ArrowDown':
+					console.log(this);
+					if(!this.inColorBlock()){
+						Palette.changeActive(event.key);
+					}
 			}
 		});
 		this.canvas.addEventListener('keyup', function(event) {
@@ -234,6 +239,28 @@ module.exports = {
 	changeBlocks: function(color) {
 		for(var i = 0; i < this.level.objects.length; i++) {
 			this.level.objects[i].active = !(this.level.objects[i].color == color);
+		}
+	},
+
+	inColorBlock: function() {
+		var playerBot = Player.y + Player.height;
+		var playerTop = Player.y;
+		var playerLeft = Player.x;
+		var playerRight = Player.x + Player.width;
+
+		for(var i = 0; i < this.level.objects.length; i++) {
+			var obj = this.level.objects[i];
+			var boxBot = obj.y + obj.height;
+			var boxTop = obj.y;
+			var boxLeft = obj.x;
+			var boxRight = obj.x + obj.width;
+
+			if(playerLeft > boxLeft && playerRight < boxRight && playerTop > boxTop && playerBot < boxBot && Palette.getActive() == this.canvas.style.backgroundColor) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 };

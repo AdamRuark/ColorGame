@@ -11,7 +11,7 @@ var numLevels = fs.readdirSync(path.join(__dirname, '/levels/')).length - 1;
 app.use(express.static('public'));
 
 app.get('/level/:num', function(req, res) {
-	console.log('Get level:' + req.params.num);
+	console.log('Get level: ' + req.params.num);
 	if(req.params.num > numLevels) {
 		// Send empty level
 		res.send({});

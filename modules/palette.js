@@ -44,7 +44,7 @@ module.exports = {
 		var div = document.getElementsByClassName('color');
 		div[this.activeToken].classList.remove('active');
 
-		if(dir == 'w') {
+		if(dir == 'w' || dir == 'ArrowUp') {
 			this.activeToken--;
 			if(this.activeToken < 0) {
 				this.activeToken = this.collection.length - 1;			
